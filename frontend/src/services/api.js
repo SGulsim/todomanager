@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// Получаем базовый URL из переменной окружения или используем относительный путь
 let API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
-// Если указан полный URL без /api, добавляем его
 if (API_BASE_URL.startsWith('http') && !API_BASE_URL.endsWith('/api')) {
 	if (!API_BASE_URL.endsWith('/')) {
 		API_BASE_URL += '/api';
