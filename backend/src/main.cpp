@@ -15,9 +15,30 @@
 #include <unistd.h>
 #endif
 
+std::string getEnvVar(const std::string& key, const std::string& defaultValue) {
+    const char* val = std::getenv(key.c_str());
+    return val ? std::string(val) : defaultValue;
+}
+
+int getEnvInt(const std::string& key, int defaultValue) {
+    const char* val = std::getenv(key.c_str());
+    if (val) {
+        try {
+            return std::stoi(val);
+        } catch (...) {
+            return defaultValue;
+        }
+    }
+    return defaultValue;
+}
+
 int main() {
-    std::string dbPath = "../data/tasks.db";
-    std::string dataDir = "../data";
+    std::string dbPath = getEnvVar("DB_PATH", "./data/tasks.db");
+    std::string dataDir = dbPath.substr(0, dbPath.find_last_of("/\\"));
+    if (dataDir.empty()) {
+        dataDir = "./data";
+        dbPath = "./data/tasks.db";
+    }
     
     #ifdef _WIN32
         if (_access(dataDir.c_str(), 0) != 0) {
@@ -34,15 +55,18 @@ int main() {
         return 1;
     }
     
-    std::cout << "Database initialized successfully" << std::endl;
+    std::cout << "Database initialized successfully at: " << dbPath << std::endl;
     
     httplib::Server server;
     setupRoutes(server);
     
-    std::cout << "Starting server on http://localhost:8080" << std::endl;
+    int port = getEnvInt("PORT", 8080);
+    std::string host = getEnvVar("HOST", "0.0.0.0");
+    
+    std::cout << "Starting server on http://" << host << ":" << port << std::endl;
     std::cout << "Press Ctrl+C to stop the server" << std::endl;
     
-    if (!server.listen("0.0.0.0", 8080)) {
+    if (!server.listen(host.c_str(), port)) {
         std::cerr << "Failed to start server" << std::endl;
         return 1;
     }

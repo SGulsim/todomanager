@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["cmake", "gcc", "sqlite"]
+
+[phases.build]
+cmds = [
+  "mkdir -p build",
+  "cd build && cmake ..",
+  "cd build && cmake --build . --config Release",
+  "cp build/todomanager ./todomanager",
+  "chmod +x ./todomanager"
+]
+
+[start]
+cmd = "./todomanager"
+
