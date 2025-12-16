@@ -90,16 +90,29 @@ int getUserIdFromRequest(const httplib::Request& req) {
 }
 
 void setupRoutes(httplib::Server& server) {
-    server.set_default_headers({
-        {"Access-Control-Allow-Origin", "*"},
-        {"Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"},
-        {"Access-Control-Allow-Headers", "Content-Type, Authorization"}
+    // CORS middleware функция - проверяет, не установлены ли заголовки уже
+    auto addCorsHeaders = [](httplib::Response& res) {
+        // Проверяем и устанавливаем заголовки только если их еще нет
+        if (!res.has_header("Access-Control-Allow-Origin")) {
+            res.set_header("Access-Control-Allow-Origin", "*");
+        }
+        if (!res.has_header("Access-Control-Allow-Methods")) {
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        }
+        if (!res.has_header("Access-Control-Allow-Headers")) {
+            res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        }
+    };
+    
+    // Обработка preflight запросов
+    server.Options(".*", [addCorsHeaders](const httplib::Request&, httplib::Response& res) {
+        addCorsHeaders(res);
+        res.status = 200;
     });
     
-    server.Options(".*", [](const httplib::Request&, httplib::Response& res) {
-        res.set_header("Access-Control-Allow-Origin", "*");
-        res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    // Добавляем CORS заголовки ко всем ответам через post-routing handler
+    server.set_post_routing_handler([addCorsHeaders](const httplib::Request&, httplib::Response& res) {
+        addCorsHeaders(res);
     });
     
     server.Post("/api/auth/register", [](const httplib::Request& req, httplib::Response& res) {
