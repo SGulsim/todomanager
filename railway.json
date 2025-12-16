@@ -10,8 +10,6 @@
     "restartPolicyMaxRetries": 10
   },
   "healthcheckPath": "/api/tasks",
-  "healthcheckTimeout": 100,
-  "rewrite": [],
-  "redirects": []
+  "healthcheckTimeout": 100
 }
 
