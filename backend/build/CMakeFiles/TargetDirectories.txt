@@ -1,0 +1,3 @@
+D:/todomanager/todomanager/backend/build/CMakeFiles/todomanager.dir
+D:/todomanager/todomanager/backend/build/CMakeFiles/ALL_BUILD.dir
+D:/todomanager/todomanager/backend/build/CMakeFiles/ZERO_CHECK.dir

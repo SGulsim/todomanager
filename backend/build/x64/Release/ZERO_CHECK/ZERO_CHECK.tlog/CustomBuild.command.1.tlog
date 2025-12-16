@@ -1,0 +1,10 @@
+^D:\TODOMANAGER\TODOMANAGER\BACKEND\BUILD\CMAKEFILES\00D6E309A3873A2BD4D385631DAEF32D\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/todomanager/todomanager/backend -BD:/todomanager/todomanager/backend/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/todomanager/todomanager/backend/build/TodoManagerBackend.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/todomanager/todomanager/backend/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
