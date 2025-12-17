@@ -2,6 +2,12 @@ import axios from 'axios';
 
 let API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
+// Если URL не начинается с http/https, но содержит точку (домен), добавляем https://
+if (!API_BASE_URL.startsWith('http') && API_BASE_URL.includes('.')) {
+	API_BASE_URL = 'https://' + API_BASE_URL;
+}
+
+// Если указан полный URL без /api, добавляем его
 if (API_BASE_URL.startsWith('http') && !API_BASE_URL.endsWith('/api')) {
 	if (!API_BASE_URL.endsWith('/')) {
 		API_BASE_URL += '/api';
